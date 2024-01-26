@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Die from "./Die.jsx";
 import { nanoid } from "nanoid";
 
 export default function App() {
-  const [dice, setDice] = React.useState(allNewDice());
+  const [dice, setDice] = useState(allNewDice());
+  const [tenzies, setTenzies] = useState(false);
 
-  /**
-   * Challenge:
-   * 1. Add new state called `tenzies`, default to false. It
-   *    represents whether the user has won the game yet or not.
-   * 2. Add an effect that runs every time the `dice` state array
-   *    changes. For now, just console.log("Dice state changed").
-   */
+  useEffect(() => {
+    const allHeld = dice.every((die) => die.isHeld);
+    const firstValue = dice[0].value;
+    const allSameValue = dice.every((die) => die.value === firstValue);
+    if (allHeld && allSameValue) {
+      setTenzies(true);
+      console.log("You won!");
+    }
+  }, [dice]);
 
   function generateNewDie() {
     return {
